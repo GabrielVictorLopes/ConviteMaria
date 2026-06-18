@@ -1,18 +1,37 @@
 "use client";
 
 import { useState } from "react";
-import { FaCheckCircle } from "react-icons/fa";
+import { useRouter } from "next/navigation";
+import { supabase } from "../lib/supabase"; // ajuste o caminho se necessário
 
 export default function RSVP() {
-  const [enviado, setEnviado] = useState(false);
+  const [codigo, setCodigo] = useState("");
+  const [erro, setErro] = useState("");
 
-  const handleSubmit = (e) => {
+  const router = useRouter();
+
+  async function acessarConvite(e) {
     e.preventDefault();
 
-    // futuramente enviaremos para o Supabase
+    if (!codigo.trim()) {
+      setErro("Digite seu código.");
+      return;
+    }
 
-    setEnviado(true);
-  };
+    const { data, error } = await supabase
+      .from("familias")
+      .select("id")
+      .eq("codigo", codigo.toUpperCase());
+
+    if (error || !data || data.length === 0) {
+      setErro("Código inválido.");
+      return;
+    }
+
+    setErro("");
+
+    router.push(`/convite/${codigo.toUpperCase()}`);
+  }
 
   return (
     <section
@@ -22,60 +41,51 @@ export default function RSVP() {
       <div className="max-w-3xl mx-auto">
 
         <div className="text-center mb-12">
-
-          <h2 className="text-6xl text-yellow-400 mb-4">
-            Confirme sua Presença
+          <h2 className="text-6xl text-yellow-500 mb-4">
+            Confirmação de Presença
           </h2>
 
           <p className="text-black text-xl">
-            Sua presença tornará esta noite ainda mais especial.
+            Digite o código enviado junto ao seu convite.
           </p>
         </div>
 
-        {!enviado ? (
-          <form onSubmit={handleSubmit}  className=" space-y-6 bg-white/[0.03]  backdrop-blur-md border     border-[#D4AF37]/20 p-10 rounded-3xl shadow-xl">
-            
-            <input
-              type="text"
-              placeholder="Nome Completo"
-              required
-              className="w-full p-4 rounded-xl bg-black/40 border border-[#D4AF37]/20text-whitefocus:outline-none focus:border-[#D4AF37]"/>
+        <form
+          onSubmit={acessarConvite}
+          className="bg-white p-10 rounded-3xl shadow-xl"
+        >
+          <input
+            type="text"
+            placeholder="Digite seu código"
+            value={codigo}
+            onChange={(e) => setCodigo(e.target.value)}
+            className="
+              w-full
+              p-4
+              rounded-xl
+              border-2
+              border-[#D4AF37]
+              bg-white
+              text-black
+              text-center
+              text-xl
+              outline-none
+            "
+          />
 
-            <input
-              type="tel"
-              placeholder="Telefone"
-              required
-              className="w-full p-4 rounded-xl bg-black/40 border border-[#D4AF37]/20text-whitefocus:outline-none focus:border-[#D4AF37]"/>
-
-            <input
-              type="number"
-              placeholder="Quantidade de acompanhantes"
-              min="0"
-              defaultValue="0"
-             className="w-full p-4 rounded-xl bg-black/40 border border-[#D4AF37]/20text-whitefocus:outline-none focus:border-[#D4AF37]"/>
-
-
-            <button
-              type="submit"
-              className="w-full bg-yellow-500 text-black font-bold py-4 rounded-xl hover:scale-105 transition"
-            >
-              Confirmar Presença
-            </button>
-          </form>
-        ) : (
-          <div className="text-center bg-black border border-yellow-500/30 rounded-3xl p-12">
-            <FaCheckCircle className="text-green-500 text-6xl mx-auto mb-6" />
-
-            <h3 className="text-3xl text-yellow-400 mb-4">
-              Presença Confirmada!
-            </h3>
-
-            <p className="text-gray-300">
-              Obrigado por confirmar.
-              Estamos ansiosos para celebrar esta noite inesquecível com você.
+          {erro && (
+            <p className="text-red-600 text-center mt-3 font-semibold">
+              {erro}
             </p>
-          </div>
-        )}
+          )}
+
+          <button
+            type="submit"
+            className="w-full mt-6 bg-yellow-500 text-black font-bold py-4 rounded-xl hover:scale-105 transition"
+          >
+            Acessar Convite
+          </button>
+        </form>
 
       </div>
     </section>

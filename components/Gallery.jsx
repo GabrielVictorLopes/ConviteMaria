@@ -20,10 +20,6 @@ export default function Gallery() {
           <h2 className="text-6xl text-yellow-400 mb-4">
             Galeria
           </h2>
-
-          <p className="text-black max-w-2xl mx-auto text-xl">
-            Em breve, os momentos mais especiais da Maria Clara.
-          </p>
         </div>
 
         <div className="grid md:grid-cols-3 gap-6">

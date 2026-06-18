@@ -49,7 +49,7 @@ export default function Countdown() {
         A Contagem Começou
       </h2>
 
-      <p className="text-black mb-12 text-xl">
+      <p className="text-black mb-12 text-3xl">
         09 de Outubro de 2026 às 22:00
       </p>
 

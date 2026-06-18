@@ -23,7 +23,7 @@ export default function Hero() {
         transition={{ duration: 1 }}
       >
       <p className="tracking-[8px] uppercase text-white mb-4">
-          Baile de Máscaras
+          Aniversário
         </p>
 
         <h1 className="text-7xl
@@ -34,11 +34,11 @@ export default function Hero() {
           Maria Clara
         </h1>
 
-        <h2 className="text-2xl mt-4 text-white">
+        <h2 className="text-7xl mt-4 text-white">
           15 Anos
         </h2>
 
-        <p className="max-w-2xl mx-auto mt-8 text-white leading-8">
+        <p className="max-w-7xl mt-8 text-white leading-8">
           Os salões se preparam para uma noite inesquecível.
           Um baile de máscaras, repleto de elegância,
           segredos e momentos que serão lembrados para sempre.

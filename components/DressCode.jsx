@@ -8,9 +8,6 @@ export default function DressCode() {
       <div className="max-w-6xl mx-auto">
 
         <div className="text-center mb-16">
-        <div className="text-5xl mb-4">
-            🎭
-        </div>
           <h2 className="text-6xl md:text-6xl text-yellow-400 mb-4">
             Baile de Máscaras
           </h2>
@@ -27,20 +24,19 @@ export default function DressCode() {
 
           {/* Masculino */}
           <div className="
-            relative
-            overflow-hidden
-            bg-white/[0.03]
-            from-[#180507]  
-            to-[#0b0b0b]
-            border
-            border-[#c9a86a]/40
-            rounded-[32px]
-            p-8
-            shadow-[0_0_40px_rgba(201,168,106,0.08)]
-            transition-all
-            duration-500
-            hover:-translate-y-2
-            hover:shadow-[0_0_60px_rgba(201,168,106,0.18)]">
+  relative
+  overflow-hidden
+  bg-[#FAF9F6]
+  border
+  border-[#c9a86a]/40
+  rounded-[32px]
+  p-8
+  shadow-[0_0_40px_rgba(201,168,106,0.08)]
+  transition-all
+  duration-500
+  hover:-translate-y-2
+  hover:shadow-[0_0_60px_rgba(201,168,106,0.18)]
+">
                 
             <div className="flex items-center gap-4 mb-6">
               <FaUserTie className="text-yellow-400 text-4xl" />
