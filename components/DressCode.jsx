@@ -26,7 +26,7 @@ export default function DressCode() {
           <div className="
             relative
             overflow-hidden
-            bg-[#FAF9F6]
+            bg-[#FFFFF]
             border
             border-[#c9a86a]/40
             rounded-[32px]
@@ -73,7 +73,7 @@ export default function DressCode() {
            <div className="
             relative
             overflow-hidden
-            bg-[#FAF9F6]
+             bg-[#FFFFF]
             border
             border-[#c9a86a]/40
             rounded-[32px]
@@ -122,7 +122,7 @@ export default function DressCode() {
 
           <div className="flex items-center justify-center gap-3 mb-6">
 
-            <h3 className="text-6xl text-yellow-400">
+            <h3 className="text-5xl text-yellow-400">
               Regras do Baile   
             </h3>
           </div>
@@ -149,7 +149,6 @@ export default function DressCode() {
               <h4 className="text-4xl text-yellow-400 mb-2">
                 Cor Rosa
               </h4>
-
               <p className="text-black text-lg">
                 Não utilizar vestidos rosa.
               </p>

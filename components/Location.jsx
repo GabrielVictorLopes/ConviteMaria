@@ -8,7 +8,7 @@ export default function Location() {
       <div className="max-w-6xl mx-auto">
 
         <div className="text-center mb-12">
-          <p className="uppercase tracking-[6px] text-6xl text-yellow-400 mb-3">
+          <p className="uppercase tracking-[6px] text-5xl text-yellow-400 mb-3">
             Local do Evento
           </p>
 

@@ -118,16 +118,19 @@ const [sucesso, setSucesso] = useState(false);
           maxWidth: "700px",
           margin: "0 auto",
           background: "#ffffff",
-          borderRadius: "24px",
-          padding: "35px",
-          boxShadow: "0 10px 30px rgba(0,0,0,.1)",
+          borderRadius: "32px",
+          padding: "50px",
+          boxShadow: "0 20px 60px rgba(0,0,0,.08)",
+          border: "1px solid rgba(212,175,55,.25)",
           fontecolor: "black",
         }}
       >
         <h1
           style={{
             textAlign: "center",
-            fontSize: "36px",
+            fontSize: "48px",
+            fontWeight: "300",
+            letterSpacing: "1px",
             color: "#000000",
             marginBottom: "10px",
 
@@ -141,7 +144,8 @@ const [sucesso, setSucesso] = useState(false);
           style={{
             textAlign: "center",
             color: "#000000",
-            marginBottom: "30px",
+            marginBottom: "40px",
+            fontSize: "18px",
           }}
         >
           Confirmação de Presença
@@ -152,22 +156,25 @@ const [sucesso, setSucesso] = useState(false);
   <div
     key={convidado.id}
     style={{
-      border: "1px solid #d4af37",
-      borderRadius: "18px",
-      padding: "20px",
-      marginBottom: "15px",
-      background: "linear-gradient(180deg, #fffdf8 0%, #ffffff 100%)",
-      boxShadow: "0 5px 15px rgba(0,0,0,.05)",
-    }}
+    border: "1px solid rgba(212,175,55,.5)",
+    borderRadius: "22px",
+    padding: "25px",
+    marginBottom: "18px",
+    background: "#ffffff",
+    boxShadow: "0 8px 20px rgba(0,0,0,.04)",
+    transition: "all .3s ease",
+}}
   >
     <div
       style={{
-        fontSize: "22px",
-        fontWeight: "600",
+        fontSize: "24px",
+        fontWeight: "500",
+        letterSpacing: ".3px",
         color: "#222",
         marginBottom: "15px",
       }}
     >
+      {convidado.nome}
     </div>
 
     <div
@@ -181,21 +188,22 @@ const [sucesso, setSucesso] = useState(false);
        alterarStatus(convidado.id, "confirmado")
         }
         style={{
-          flex: 1,
-          padding: "14px",
-          borderRadius: "12px",
+           flex: 1,
+          padding: "16px",
+          borderRadius: "14px",
           border: "none",
           cursor: "pointer",
-          fontWeight: "bold",
-         background:
-          convidado.status === "confirmado"
-          ? "#16a34a"
-          : "#f3f4f6",
-
+          fontWeight: "600",
+          fontSize: "15px",
+          transition: "all .3s ease",
+          background:
+            convidado.status === "confirmado"
+              ? "#16a34a"
+              : "#f8f8f8",
           color:
-        convidado.status === "confirmado"
-        ? "#fff"
-        : "#222",
+            convidado.status === "confirmado"
+              ? "#fff"
+              : "#333",
         }}
       >
         ✓ Vou Comparecer
@@ -206,19 +214,21 @@ const [sucesso, setSucesso] = useState(false);
         alterarStatus(convidado.id, "nao_vou")}
         style={{
           flex: 1,
-          padding: "14px",
-          borderRadius: "12px",
+          padding: "16px",
+          borderRadius: "14px",
           border: "none",
           cursor: "pointer",
-          fontWeight: "bold",
+          fontWeight: "600",
+          fontSize: "15px",
+          transition: "all .3s ease",
           background:
-          convidado.status === "nao_vou"
-          ? "#dc2626"
-          : "#f3f4f6",
+            convidado.status === "nao_vou"
+              ? "#dc2626"
+              : "#f8f8f8",
           color:
-          convidado.status === "nao_vou"
-          ? "#fff"
-          : "#222",
+            convidado.status === "nao_vou"
+              ? "#fff"
+              : "#333",
         }}
       >
         ✕ Não Comparecerei
@@ -233,7 +243,11 @@ const [sucesso, setSucesso] = useState(false);
             width: "100%",
             marginTop: "25px",
             padding: "16px",
-            background: "#d4af37",
+            background:
+            "linear-gradient(135deg,#d4af37,#e7c45a)",
+            boxShadow:
+            "0 10px 25px rgba(212,175,55,.35)",
+            letterSpacing: ".5px",
             color: "#000",
             border: "none",
             borderRadius: "14px",
