@@ -54,8 +54,17 @@ export default function Admin() {
     );
   }
 
-const confirmados = convidados.filter(c => c.confirmado === true).length;
-const pendentes = convidados.filter(c => c.confirmado !== true).length;
+const confirmados = convidados.filter(
+  c => c.status === "confirmado"
+).length;
+
+const recusados = convidados.filter(
+  c => c.status === "nao_vou"
+).length;
+
+const pendentes = convidados.filter(
+  c => c.status === "pendente"
+).length;
 
   const convidadosFiltrados = convidados.filter((c) => {
   const passouBusca = c.nome?.toLowerCase().includes(busca.toLowerCase());
@@ -259,18 +268,37 @@ const pendentes = convidados.filter(c => c.confirmado !== true).length;
               {c.familias?.codigo} - {c.familias?.nome_familia}
             </div>
           </div>
-
-          <span
-            style={{
-              fontWeight: "bold",
-              color: c.confirmado ? "green" : "red",
-            }}
-          >
-            {c.confirmado
-              ? "✅ CONFIRMADO"
-              : "❌ PENDENTE"}
-          </span>
+        <span
+          style={{
+            fontWeight: "bold",
+            color:
+              c.status === "confirmado"
+                ? "green"
+                : c.status === "nao_vou"
+                ? "red"
+                : "#d4af37",
+          }}
+        >
+          {c.status === "confirmado"
+            ? "CONFIRMADO"
+            : c.status === "nao_vou"
+            ? "NÃO VAI"
+            : "PENDENTE"}
+        </span>
+        <div
+        style={{
+          background: "#fff",
+          padding: "20px",
+          borderRadius: "15px",
+          minWidth: "180px",
+          boxShadow: "0 5px 15px rgba(0,0,0,.08)",
+        }}
+      >
+        <h3>Não vão</h3>
+        <h2>{recusados}</h2>
         </div>
+        </div>
+        
       ))}
     </div>
   );

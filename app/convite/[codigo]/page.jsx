@@ -7,9 +7,10 @@ import { supabase } from "../../../lib/supabase";
 export default function Convite() {
   const params = useParams();
 
-  const [familia, setFamilia] = useState(null);
-  const [convidados, setConvidados] = useState([]);
-  const [loading, setLoading] = useState(true);
+ const [familia, setFamilia] = useState(null);
+const [convidados, setConvidados] = useState([]);
+const [loading, setLoading] = useState(true);
+const [sucesso, setSucesso] = useState(false);
 
   useEffect(() => {
     if (params?.codigo) {
@@ -41,15 +42,15 @@ export default function Convite() {
     setLoading(false);
   }
 
-  function toggleConfirmado(id) {
-    setConvidados((anterior) =>
-      anterior.map((c) =>
-        c.id === id
-          ? { ...c, confirmado: !c.confirmado }
-          : c
-      )
-    );
-  }
+  function alterarStatus(id, status) {
+  setConvidados((anterior) =>
+    anterior.map((c) =>
+      c.id === id
+        ? { ...c, status }
+        : c
+    )
+  );
+}
 
   async function salvarConfirmacao() {
     try {
@@ -57,14 +58,14 @@ export default function Convite() {
         const { error } = await supabase
           .from("convidados")
           .update({
-            confirmado: convidado.confirmado,
-          })
+          status: convidado.status,
+        })
           .eq("id", convidado.id);
 
         if (error) throw error;
       }
 
-      alert("Presença confirmada com sucesso!");
+      setSucesso(true);
     } catch (error) {
       console.error(error);
       alert("Erro ao salvar confirmação.");
@@ -136,6 +137,7 @@ export default function Convite() {
         </h1>
 
         <p
+
           style={{
             textAlign: "center",
             color: "#000000",
@@ -154,7 +156,8 @@ export default function Convite() {
       borderRadius: "18px",
       padding: "20px",
       marginBottom: "15px",
-      background: "#fffdf8",
+      background: "linear-gradient(180deg, #fffdf8 0%, #ffffff 100%)",
+      boxShadow: "0 5px 15px rgba(0,0,0,.05)",
     }}
   >
     <div
@@ -165,7 +168,6 @@ export default function Convite() {
         marginBottom: "15px",
       }}
     >
-      {convidado.nome}
     </div>
 
     <div
@@ -175,8 +177,9 @@ export default function Convite() {
       }}
     >
       <button
-        type="button"
-        onClick={() => toggleConfirmado(convidado.id, true)}
+       onClick={() =>
+       alterarStatus(convidado.id, "confirmado")
+        }
         style={{
           flex: 1,
           padding: "14px",
@@ -184,20 +187,23 @@ export default function Convite() {
           border: "none",
           cursor: "pointer",
           fontWeight: "bold",
-          background: convidado.confirmado
-            ? "#16a34a"
-            : "#f3f4f6",
-          color: convidado.confirmado
-            ? "#fff"
-            : "#222",
+         background:
+          convidado.status === "confirmado"
+          ? "#16a34a"
+          : "#f3f4f6",
+
+          color:
+        convidado.status === "confirmado"
+        ? "#fff"
+        : "#222",
         }}
       >
         ✓ Vou Comparecer
       </button>
 
       <button
-        type="button"
-        onClick={() => toggleConfirmado(convidado.id, false)}
+       onClick={() =>
+        alterarStatus(convidado.id, "nao_vou")}
         style={{
           flex: 1,
           padding: "14px",
@@ -205,12 +211,14 @@ export default function Convite() {
           border: "none",
           cursor: "pointer",
           fontWeight: "bold",
-          background: !convidado.confirmado
-            ? "#dc2626"
-            : "#f3f4f6",
-          color: !convidado.confirmado
-            ? "#fff"
-            : "#222",
+          background:
+          convidado.status === "nao_vou"
+          ? "#dc2626"
+          : "#f3f4f6",
+          color:
+          convidado.status === "nao_vou"
+          ? "#fff"
+          : "#222",
         }}
       >
         ✕ Não Comparecerei
@@ -237,6 +245,79 @@ export default function Convite() {
         >
           Confirmar Presença
         </button>
+        {sucesso && (
+  <div
+    style={{
+      position: "fixed",
+      inset: 0,
+      background: "rgba(0,0,0,0.65)",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      zIndex: 9999,
+    }}
+  >
+    <div
+      style={{
+        background: "#fff",
+        width: "90%",
+        maxWidth: "500px",
+        padding: "40px",
+        borderRadius: "24px",
+        textAlign: "center",
+        boxShadow: "0 20px 60px rgba(0,0,0,.25)",
+      }}
+    >
+      <div
+        style={{
+          fontSize: "70px",
+          marginBottom: "20px",
+        }}
+      >
+        ✨
+      </div>
+
+      <h2
+        style={{
+          color: "#d4af37",
+          fontSize: "32px",
+          marginBottom: "15px",
+        }}
+      >
+        Resposta Registrada!
+      </h2>
+
+      <p
+        style={{
+          color: "#444",
+          fontSize: "18px",
+          lineHeight: "1.7",
+          marginBottom: "25px",
+        }}
+      >
+        Sua resposta foi salva com sucesso.
+        <br />
+        Obrigado por participar deste momento tão especial.
+      </p>
+
+      <button
+        onClick={() => setSucesso(false)}
+        style={{
+          background: "#d4af37",
+          color: "#000",
+          border: "none",
+          padding: "14px 30px",
+          borderRadius: "12px",
+          cursor: "pointer",
+          fontWeight: "bold",
+          fontSize: "16px",
+        }}
+      >
+        Fechar
+      </button>
+    </div>
+  </div>
+)}
       </div>
     </div>
   );
