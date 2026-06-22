@@ -125,38 +125,22 @@ const [sucesso, setSucesso] = useState(false);
           fontecolor: "black",
         }}
       >
-        <h1
-          style={{
-            textAlign: "center",
-            fontSize: "48px",
-            fontWeight: "300",
-            letterSpacing: "1px",
-            color: "#000000",
-            marginBottom: "10px",
-
-          }}
-        >
-          {familia.nome_familia}
-        </h1>
-
-        <p
-
-          style={{
-            textAlign: "center",
-            color: "#000000",
-            marginBottom: "40px",
-            fontSize: "18px",
-          }}
-        >
-          Confirmação de Presença
-        </p>
-
+       <h1
+  style={{
+    textAlign: "center",
+    fontSize: "30px",
+    color: "#000000",
+    marginBottom: "30px",
+  }}
+>
+  Confirmação de Presença
+</h1>
         <div style={{ marginTop: "20px" }}>
          {convidados.map((convidado) => (
   <div
     key={convidado.id}
     style={{
-    border: "1px solid rgba(212,175,55,.5)",
+    border: "1px solid #f0f0f0",
     borderRadius: "22px",
     padding: "25px",
     marginBottom: "18px",
@@ -166,15 +150,18 @@ const [sucesso, setSucesso] = useState(false);
 }}
   >
     <div
-      style={{
-        fontSize: "24px",
-        fontWeight: "500",
-        letterSpacing: ".3px",
-        color: "#222",
-        marginBottom: "15px",
-      }}
-    >
-      {convidado.nome}
+  style={{
+    fontSize: "26px",
+    fontWeight: "600",
+    letterSpacing: ".5px",
+    color: "#222",
+    marginBottom: "20px",
+    textAlign: "center",
+    borderBottom: "1px solid rgba(212,175,55,.25)",
+    paddingBottom: "15px",
+  }}
+>
+  {convidado.nome}
     </div>
 
     <div
@@ -196,14 +183,16 @@ const [sucesso, setSucesso] = useState(false);
           fontWeight: "600",
           fontSize: "15px",
           transition: "all .3s ease",
-          background:
+          background: "#16a34a",
+          color: "#fff",
+          transform:
             convidado.status === "confirmado"
-              ? "#16a34a"
-              : "#f8f8f8",
-          color:
+              ? "scale(1.08)"
+              : "scale(1)",
+          boxShadow:
             convidado.status === "confirmado"
-              ? "#fff"
-              : "#333",
+              ? "0 0 20px rgba(22,163,74,.4)"
+              : "none",
         }}
       >
         ✓ Vou Comparecer
@@ -221,17 +210,19 @@ const [sucesso, setSucesso] = useState(false);
           fontWeight: "600",
           fontSize: "15px",
           transition: "all .3s ease",
-          background:
+          background: "#dc2626",
+          color: "#fff",
+          transform:
             convidado.status === "nao_vou"
-              ? "#dc2626"
-              : "#f8f8f8",
-          color:
+              ? "scale(1.08)"
+              : "scale(1)",
+          boxShadow:
             convidado.status === "nao_vou"
-              ? "#fff"
-              : "#333",
+              ? "0 0 20px rgba(220,38,38,.4)"
+              : "none",
         }}
       >
-        ✕ Não Comparecerei
+        ✕ Não vou Comparecer
       </button>
     </div>
   </div>
