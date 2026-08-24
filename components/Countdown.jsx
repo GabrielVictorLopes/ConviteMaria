@@ -21,27 +21,27 @@ export default function Countdown() {
 
     return {
       dias: Math.floor(diferenca / (1000 * 60 * 60 * 24)),
-      horas: Math.floor(
-        (diferenca / (1000 * 60 * 60)) % 24
-      ),
-      minutos: Math.floor(
-        (diferenca / (1000 * 60)) % 60
-      ),
-      segundos: Math.floor(
-        (diferenca / 1000) % 60
-      ),
+      horas: Math.floor((diferenca / (1000 * 60 * 60)) % 24),
+      minutos: Math.floor((diferenca / (1000 * 60)) % 60),
+      segundos: Math.floor((diferenca / 1000) % 60),
     };
   };
 
-  const [tempo, setTempo] = useState(calcularTempo());
+  const [tempo, setTempo] = useState(null);
 
   useEffect(() => {
+    setTempo(calcularTempo());
+
     const intervalo = setInterval(() => {
       setTempo(calcularTempo());
     }, 1000);
 
     return () => clearInterval(intervalo);
   }, []);
+
+  if (!tempo) {
+    return null;
+  }
 
   const itens = [
     { valor: tempo.dias, label: "Dias" },
@@ -58,7 +58,7 @@ export default function Countdown() {
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
-          className="uppercase tracking-[8px] text-yellow-600 text-xs mb-4"
+          className="uppercase tracking-[8px] text-yellow-600 text-2xl mb-4"
         >
           Está chegando
         </motion.p>
@@ -75,9 +75,7 @@ export default function Countdown() {
 
         <div className="flex items-center justify-center gap-4 mt-6 mb-12">
           <div className="w-16 h-[1px] bg-yellow-500/40" />
-          <span className="text-yellow-500 text-xl">
-            ✦
-          </span>
+          <span className="text-yellow-500 text-xl">✦</span>
           <div className="w-16 h-[1px] bg-yellow-500/40" />
         </div>
 
@@ -109,26 +107,18 @@ export default function Countdown() {
                 {String(item.valor).padStart(2, "0")}
               </div>
 
-              <div className="
-                uppercase
-                tracking-[2px]
-                md:tracking-[4px]
-                text-[9px]
-                md:text-xs
-                text-black/50
-                mt-2
-              ">
+              <div className="uppercase tracking-[2px] md:tracking-[4px] text-[9px] md:text-xs text-black/50 mt-2">
                 {item.label}
               </div>
             </motion.div>
           ))}
         </div>
 
-        <p className="mt-10 text-black/50 text-lg md:text-xl tracking-wide">
+        <p className="mt-10 text-black/50 text-2xl md:text-2xl tracking-wide">
           09 de outubro de 2026 • 22h
         </p>
 
       </div>
     </section>
   );
-} 
+}

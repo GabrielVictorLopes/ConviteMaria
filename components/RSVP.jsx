@@ -115,6 +115,7 @@ export default function RSVP() {
                 text-lg
                 tracking-[2px]
                 uppercase
+                font-sans
                 outline-none
                 placeholder:text-black/30
                 placeholder:normal-case
