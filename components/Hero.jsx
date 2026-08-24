@@ -9,7 +9,7 @@ export default function Hero() {
 
       {/* IMAGEM DE FUNDO */}
       <Image
-        src="/fotos/maria7.png"
+        src="/fotos/maria8.jpeg"
         alt="Maria Clara"
         fill
         priority
