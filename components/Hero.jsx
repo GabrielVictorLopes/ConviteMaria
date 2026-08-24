@@ -1,23 +1,26 @@
 "use client";
 
 import { motion } from "framer-motion";
-import maria7 from "./fotos/maria7.jpeg";
+import Image from "next/image";
 
 export default function Hero() {
   return (
-    <section className="min-h-screen flex items-center justify-center relative px-6 bg-transparent">
+    <section className="min-h-screen flex items-center justify-center relative px-6 overflow-hidden">
 
-      {/* FOTO DE FUNDO */}
-      <div
-        className="absolute inset-0 bg-cover bg-center"
-        style={{
-          backgroundImage: `url(${maria7.src})`,
-        }}
+      {/* IMAGEM DE FUNDO */}
+      <Image
+        src="/fotos/maria7.png"
+        alt="Maria Clara"
+        fill
+        priority
+        sizes="100vw"
+        className="object-cover object-center"
       />
 
-      {/* ESCURECIMENTO DA FOTO */}
-      <div className="absolute inset-0 bg-black/70" />
+      {/* ESCURECIMENTO */}
+      <div className="absolute inset-0 bg-black/40 z-[1]" />
 
+      {/* CONTEÚDO */}
       <motion.div
         className="relative z-10 text-center max-w-4xl"
         initial={{ opacity: 0, y: 80 }}

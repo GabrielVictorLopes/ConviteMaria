@@ -1,35 +1,71 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FaMusic, FaPause } from "react-icons/fa";
 
 export default function MusicPlayer() {
   const audioRef = useRef(null);
-  const playPromiseRef = useRef(null);
   const [playing, setPlaying] = useState(false);
 
-  const toggleMusic = async () => {
+  useEffect(() => {
+    const audio = audioRef.current;
+
+    if (!audio) return;
+
+    audio.volume = 0.5;
+
+    // Tenta autoplay
+    const tentarTocar = async () => {
+      try {
+        await audio.play();
+        setPlaying(true);
+      } catch {
+        // Navegador bloqueou o autoplay.
+      }
+    };
+
+    tentarTocar();
+
+    // Se o autoplay for bloqueado,
+    // toca na primeira interação do usuário.
+    const iniciarNaInteracao = async () => {
+      if (!audio.paused) return;
+
+      try {
+        await audio.play();
+        setPlaying(true);
+
+        document.removeEventListener("click", iniciarNaInteracao);
+        document.removeEventListener("touchstart", iniciarNaInteracao);
+      } catch {}
+    };
+
+    document.addEventListener("click", iniciarNaInteracao);
+    document.addEventListener("touchstart", iniciarNaInteracao);
+
+    return () => {
+      document.removeEventListener("click", iniciarNaInteracao);
+      document.removeEventListener("touchstart", iniciarNaInteracao);
+    };
+  }, []);
+
+  const toggleMusic = async (event) => {
+    // Impede que o clique do botão também seja interpretado
+    // pelo listener global.
+    event.stopPropagation();
+
     const audio = audioRef.current;
 
     if (!audio) return;
 
     if (audio.paused) {
       try {
-        playPromiseRef.current = audio.play();
-        await playPromiseRef.current;
+        await audio.play();
         setPlaying(true);
       } catch (error) {
-        if (error.name !== "AbortError") {
-          console.error("Erro ao reproduzir:", error);
-        }
+        console.error("Erro ao reproduzir:", error);
       }
     } else {
-      try {
-        if (playPromiseRef.current) {
-          await playPromiseRef.current;
-        }
-      } catch {}
-
       audio.pause();
       setPlaying(false);
     }
@@ -41,11 +77,11 @@ export default function MusicPlayer() {
         ref={audioRef}
         loop
         preload="auto"
+        autoPlay
         onPlay={() => setPlaying(true)}
         onPause={() => setPlaying(false)}
       >
         <source src="/music/musica.mp3" type="audio/mpeg" />
-        Seu navegador não suporta o elemento de áudio.
       </audio>
 
       <button
