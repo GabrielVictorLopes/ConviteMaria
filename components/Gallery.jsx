@@ -2,13 +2,20 @@
 
 import { motion } from "framer-motion";
 
+import maria1 from "./fotos/maria1.jpeg";
+import maria2 from "./fotos/maria2.jpeg";
+import maria3 from "./fotos/maria3.jpeg";
+import maria4 from "./fotos/maria4.jpeg";
+import maria5 from "./fotos/maria5.jpeg";
+import maria6 from "./fotos/maria6.jpeg";
+
 const fotos = [
-  "https://images.unsplash.com/photo-1519741497674-611481863552",
-  "https://images.unsplash.com/photo-1511285560929-80b456fea0bc",
-  "https://images.unsplash.com/photo-1511578314322-379afb476865",
-  "https://images.unsplash.com/photo-1505236858219-8359eb29e329",
-  "https://images.unsplash.com/photo-1519167758481-83f550bb49b3",
-  "https://images.unsplash.com/photo-1519225421980-715cb0215aed",
+  maria1,
+  maria2,
+  maria3,
+  maria4,
+  maria5,
+  maria6,
 ];
 
 export default function Gallery() {
@@ -22,7 +29,7 @@ export default function Gallery() {
           </h2>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {fotos.map((foto, index) => (
             <motion.div
               key={index}
@@ -32,13 +39,14 @@ export default function Gallery() {
               className="overflow-hidden rounded-3xl border border-yellow-500/30"
             >
               <img
-                src={foto}
-                alt="Galeria"
+                src={foto.src}
+                alt={`Maria Clara - Foto ${index + 1}`}
                 className="w-full h-[400px] object-cover transition duration-500 hover:scale-110"
               />
             </motion.div>
           ))}
         </div>
+
       </div>
     </section>
   );

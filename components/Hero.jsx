@@ -1,20 +1,22 @@
 "use client";
 
 import { motion } from "framer-motion";
+import maria7 from "./fotos/maria7.jpeg";
 
 export default function Hero() {
   return (
     <section className="min-h-screen flex items-center justify-center relative px-6 bg-transparent">
 
-    <div
-  className="absolute inset-0 bg-cover bg-center"
-  style={{
-      backgroundImage: "url('https://images.unsplash.com/photo-1519225421980-715cb0215aed')",
-  }}
-/>
+      {/* FOTO DE FUNDO */}
+      <div
+        className="absolute inset-0 bg-cover bg-center"
+        style={{
+          backgroundImage: `url(${maria7.src})`,
+        }}
+      />
 
+      {/* ESCURECIMENTO DA FOTO */}
       <div className="absolute inset-0 bg-black/70" />
-<div className="absolute inset-0" />
 
       <motion.div
         className="relative z-10 text-center max-w-4xl"
@@ -22,15 +24,11 @@ export default function Hero() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1 }}
       >
-      <p className="tracking-[8px] uppercase text-white mb-4">
+        <p className="tracking-[8px] uppercase text-white mb-4">
           Aniversário
         </p>
 
-        <h1 className="text-7xl
-            md:text-9xl
-            font-light
-            text-white
-            drop-shadow-lg">
+        <h1 className="text-7xl md:text-9xl font-light text-white drop-shadow-lg">
           Maria Clara
         </h1>
 
@@ -46,24 +44,14 @@ export default function Hero() {
 
         <div className="mt-10">
           <a
-  href="#confirmacao"
-  className="
-    bg-yellow-500
-    text-black
-    px-10
-    py-5
-    rounded-full
-    font-bold
-    text-lg
-    hover:scale-105
-    transition
-    shadow-lg
-  "
->
-  Entrar no Baile
-</a>
+            href="#confirmacao"
+            className="bg-yellow-500 text-black px-10 py-5 rounded-full font-bold text-lg hover:scale-105 transition shadow-lg"
+          >
+            Entrar no Baile
+          </a>
         </div>
       </motion.div>
+
     </section>
   );
 }

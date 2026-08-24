@@ -5,27 +5,33 @@ import { FaMusic, FaPause } from "react-icons/fa";
 
 export default function MusicPlayer() {
   const audioRef = useRef(null);
-  const [playing, setPlaying] = useState(false);
   const playPromiseRef = useRef(null);
+  const [playing, setPlaying] = useState(false);
 
   const toggleMusic = async () => {
     const audio = audioRef.current;
+
     if (!audio) return;
 
     if (audio.paused) {
       try {
         playPromiseRef.current = audio.play();
         await playPromiseRef.current;
+        setPlaying(true);
       } catch (error) {
         if (error.name !== "AbortError") {
           console.error("Erro ao reproduzir:", error);
         }
       }
     } else {
-      if (playPromiseRef.current) {
-        await playPromiseRef.current;
-      }
+      try {
+        if (playPromiseRef.current) {
+          await playPromiseRef.current;
+        }
+      } catch {}
+
       audio.pause();
+      setPlaying(false);
     }
   };
 
