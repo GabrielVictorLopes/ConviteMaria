@@ -5,7 +5,18 @@ const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700"],
 });
+export const metadata = {
+  title: "Maria Clara | 15 Anos",
+  description:
+    "Você está convidado para uma noite inesquecível.",
 
+  openGraph: {
+    title: "Maria Clara • 15 Anos",
+    description:
+      "Um baile de máscaras, elegância e momentos inesquecíveis.",
+    images: ["/fotos/maria8.jpeg"],
+  },
+};
 export default function RootLayout({ children }) {
   return (
     <html lang="pt-BR">

@@ -8,22 +8,24 @@ export default function Location() {
       <div className="max-w-6xl mx-auto">
 
         <div className="text-center mb-12">
-          <p className="uppercase tracking-[6px] text-5xl text-yellow-400 mb-3">
-            Local do Evento
-          </p>
+  <p className="uppercase tracking-[8px] text-[#c9a86a] text-xs mb-4">
+    Localização
+  </p>
 
-          <h2 className="text-5xl text-yellow-400 mb-4">
-            Zen House
-          </h2>
+  <h2 className="text-5xl md:text-7xl text-yellow-400 font-light">
+    Zen House
+  </h2>
 
-          <p className="text-black text-lg">
-            Av. Alto do Chuá, 121
-          </p>
+  <div className="w-16 h-px bg-[#c9a86a]/50 mx-auto my-6" />
 
-          <p className="text-black text-lg">
-            Fábio Notini • Divinópolis - MG
-          </p>
-        </div>
+  <p className="text-black/70 text-lg">
+    Av. Alto do Chuá, 121
+  </p>
+
+  <p className="text-black/50 mt-1">
+    Fábio Notini • Divinópolis - MG
+  </p>
+</div>
 
         {/* Mapa */}
         <div className="overflow-hidden rounded-3xl border border-yellow-500/30 shadow-2xl">
