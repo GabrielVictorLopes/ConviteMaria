@@ -29,7 +29,7 @@ export default function Hero() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.4 }}
-          className="tracking-[10px] uppercase text-sm md:text-base text-white/80 mb-5"
+          className="tracking-[10px] uppercase text-xl md:text-2xl text-white/80 mb-5"
         >
           Uma noite inesquecível
         </motion.p>
@@ -48,13 +48,8 @@ export default function Hero() {
           XV Anos
         </h2>
 
-        <p className="mt-6 text-white/90 tracking-[4px] text-sm md:text-base">
+        <p className="mt-6 text-white/90 tracking-[4px] text-xl md:text-2xl">
           09 • 10 • 2026
-        </p>
-
-        <p className="max-w-2xl mx-auto mt-7 text-white/80 leading-7 text-sm md:text-base">
-          Entre máscaras, sonhos e encantos, uma noite especial
-          espera por você.
         </p>
 
         <a

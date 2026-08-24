@@ -13,7 +13,7 @@ export default function DressCode() {
       <div className="max-w-6xl mx-auto">
 
         <div className="text-center mb-12">
-          <p className="uppercase tracking-[7px] text-yellow-600 text-xs mb-4">
+          <p className="uppercase tracking-[7px] text-yellow-600 text-2xl mb-4">
             Dress Code
           </p>
 
@@ -21,7 +21,7 @@ export default function DressCode() {
             Baile de Máscaras
           </h2>
 
-          <p className="text-black/70 max-w-2xl mx-auto text-lg md:text-xl leading-8">
+          <p className="text-black/70 max-w-2xl mx-auto text-xl md:text-2xl leading-8">
             Para tornar esta noite ainda mais especial,
             contamos com a elegância e o encanto de todos os convidados.
           </p>
@@ -144,7 +144,7 @@ export default function DressCode() {
               Detalhes do Baile
             </h3>
 
-            <p className="text-black/70 text-lg leading-8 max-w-3xl mx-auto">
+            <p className="text-black/70 text-xl leading-8 max-w-3xl mx-auto">
               Nossa celebração será inspirada nos tradicionais bailes de máscaras.
               Prepare-se para uma noite de encanto, elegância e momentos inesquecíveis.
             </p>

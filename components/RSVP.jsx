@@ -56,7 +56,7 @@ export default function RSVP() {
           <div className="w-16 h-[1px] bg-yellow-500/40" />
         </div>
 
-        <p className="uppercase tracking-[6px] text-yellow-600 text-xs mb-4">
+        <p className="uppercase tracking-[6px] text-yellow-600 text-2xl mb-4">
           Lista de convidados
         </p>
 
@@ -64,7 +64,7 @@ export default function RSVP() {
           Sua Presença
         </h2>
 
-        <p className="mt-6 text-black/70 text-lg leading-8 max-w-xl mx-auto">
+        <p className="mt-6 text-black/70 text-xl leading-8 max-w-xl mx-auto">
           Insira o código recebido junto ao seu convite para acessar
           sua confirmação de presença no baile.
         </p>
@@ -151,7 +151,7 @@ export default function RSVP() {
             </p>
           )}
 
-          <p className="text-black/40 text-xs mt-5 tracking-wide">
+          <p className="text-black/40 text-base mt-5 tracking-wide">
             Seu código é pessoal e exclusivo.
           </p>
         </form>

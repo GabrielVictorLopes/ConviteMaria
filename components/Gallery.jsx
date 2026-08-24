@@ -18,7 +18,7 @@ export default function Gallery() {
     <section className="py-24 px-4 md:px-8">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-14">
-          <p className="tracking-[8px] uppercase text-yellow-500 text-xs mb-3">
+          <p className="tracking-[8px] uppercase text-yellow-500 text-3xl mb-3">
             Momentos
           </p>
 

@@ -8,7 +8,7 @@ export default function Location() {
       <div className="max-w-6xl mx-auto">
 
         <div className="text-center mb-12">
-  <p className="uppercase tracking-[8px] text-[#c9a86a] text-xs mb-4">
+  <p className="uppercase tracking-[8px] text-[#c9a86a] text-2xl mb-4">
     Localização
   </p>
 
@@ -18,11 +18,11 @@ export default function Location() {
 
   <div className="w-16 h-px bg-[#c9a86a]/50 mx-auto my-6" />
 
-  <p className="text-black/70 text-lg">
+  <p className="text-black/70 text-xl">
     Av. Alto do Chuá, 121
   </p>
 
-  <p className="text-black/50 mt-1">
+  <p className="text-black/50 mt-1 text-xl">
     Fábio Notini • Divinópolis - MG
   </p>
 </div>

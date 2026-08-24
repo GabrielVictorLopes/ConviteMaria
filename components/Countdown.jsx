@@ -124,7 +124,7 @@ export default function Countdown() {
           ))}
         </div>
 
-        <p className="mt-10 text-black/50 text-sm md:text-base tracking-wide">
+        <p className="mt-10 text-black/50 text-lg md:text-xl tracking-wide">
           09 de outubro de 2026 • 22h
         </p>
 
