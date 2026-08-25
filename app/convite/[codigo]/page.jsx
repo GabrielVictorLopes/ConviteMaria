@@ -4,13 +4,20 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { supabase } from "../../../lib/supabase";
 
+import {
+  FaCheck,
+  FaXmark,
+  FaCrown,
+} from "react-icons/fa6";
+
 export default function Convite() {
   const params = useParams();
 
- const [familia, setFamilia] = useState(null);
-const [convidados, setConvidados] = useState([]);
-const [loading, setLoading] = useState(true);
-const [sucesso, setSucesso] = useState(false);
+  const [familia, setFamilia] = useState(null);
+  const [convidados, setConvidados] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [salvando, setSalvando] = useState(false);
+  const [sucesso, setSucesso] = useState(false);
 
   useEffect(() => {
     if (params?.codigo) {
@@ -19,12 +26,16 @@ const [sucesso, setSucesso] = useState(false);
   }, [params]);
 
   async function carregar() {
+    setLoading(true);
+
     const { data, error } = await supabase
       .from("familias")
       .select("*")
-      .eq("codigo", params.codigo);
+      .eq("codigo", params.codigo)
+      .limit(1);
 
     if (error || !data || data.length === 0) {
+      setFamilia(null);
       setLoading(false);
       return;
     }
@@ -33,33 +44,41 @@ const [sucesso, setSucesso] = useState(false);
 
     setFamilia(familiaData);
 
-    const { data: convidadosData } = await supabase
-      .from("convidados")
-      .select("*")
-      .eq("familia_id", familiaData.id);
+    const { data: convidadosData, error: convidadosError } =
+      await supabase
+        .from("convidados")
+        .select("*")
+        .eq("familia_id", familiaData.id)
+        .order("nome");
+
+    if (convidadosError) {
+      console.error(convidadosError);
+    }
 
     setConvidados(convidadosData || []);
     setLoading(false);
   }
 
   function alterarStatus(id, status) {
-  setConvidados((anterior) =>
-    anterior.map((c) =>
-      c.id === id
-        ? { ...c, status }
-        : c
-    )
-  );
-}
+    setConvidados((anterior) =>
+      anterior.map((convidado) =>
+        convidado.id === id
+          ? { ...convidado, status }
+          : convidado
+      )
+    );
+  }
 
   async function salvarConfirmacao() {
     try {
+      setSalvando(true);
+
       for (const convidado of convidados) {
         const { error } = await supabase
           .from("convidados")
           .update({
-          status: convidado.status,
-        })
+            status: convidado.status,
+          })
           .eq("id", convidado.id);
 
         if (error) throw error;
@@ -69,261 +88,304 @@ const [sucesso, setSucesso] = useState(false);
     } catch (error) {
       console.error(error);
       alert("Erro ao salvar confirmação.");
+    } finally {
+      setSalvando(false);
     }
   }
 
+  const confirmados = convidados.filter(
+    (convidado) => convidado.status === "confirmado"
+  ).length;
+
+  const respondidos = convidados.filter(
+    (convidado) =>
+      convidado.status === "confirmado" ||
+      convidado.status === "nao_vou"
+  ).length;
+
   if (loading) {
     return (
-      <div
-        style={{
-          minHeight: "100vh",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          fontSize: "24px",
-          fontecolor: "black",
-        }}
-      >
-        Carregando...
-      </div>
+      <main className="min-h-screen flex items-center justify-center px-6">
+        <div className="text-center">
+          <div className="w-10 h-10 border-2 border-yellow-500/30 border-t-yellow-500 rounded-full animate-spin mx-auto mb-5" />
+
+          <p className="text-black/60 text-lg">
+            Carregando convite...
+          </p>
+        </div>
+      </main>
     );
   }
 
   if (!familia) {
     return (
-      <div
-        style={{
-          minHeight: "100vh",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          fontSize: "24px",
-          fontecolor: "black",
-        }}
-      >
-        Código inválido
-      </div>
+      <main className="min-h-screen flex items-center justify-center px-6">
+        <div className="max-w-md text-center">
+          <FaXmark className="text-yellow-500 text-5xl mx-auto mb-6" />
+
+          <h1 className="text-4xl text-yellow-500 mb-4">
+            Convite não encontrado
+          </h1>
+
+          <p className="text-black/60 text-lg">
+            Verifique se o código informado está correto.
+          </p>
+        </div>
+      </main>
     );
   }
 
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        padding: "40px 20px",
-      }}
-    >
-      <div
-        style={{
-          maxWidth: "700px",
-          margin: "0 auto",
-          background: "#ffffff",
-          borderRadius: "32px",
-          padding: "50px",
-          boxShadow: "0 20px 60px rgba(0,0,0,.08)",
-          border: "1px solid rgba(212,175,55,.25)",
-          fontecolor: "black",
-        }}
-      >
-       <h1
-  style={{
-    textAlign: "center",
-    fontSize: "30px",
-    color: "#000000",
-    marginBottom: "30px",
-  }}
->
-  Confirmação de Presença
-</h1>
-        <div style={{ marginTop: "20px" }}>
-         {convidados.map((convidado) => (
-  <div
-    key={convidado.id}
-    style={{
-    border: "1px solid #f0f0f0",
-    borderRadius: "22px",
-    padding: "25px",
-    marginBottom: "18px",
-    background: "#ffffff",
-    boxShadow: "0 8px 20px rgba(0,0,0,.04)",
-    transition: "all .3s ease",
-}}
-  >
-    <div
-  style={{
-    fontSize: "26px",
-    fontWeight: "600",
-    letterSpacing: ".5px",
-    color: "#222",
-    marginBottom: "20px",
-    textAlign: "center",
-    borderBottom: "1px solid rgba(212,175,55,.25)",
-    paddingBottom: "15px",
-  }}
->
-  {convidado.nome}
-    </div>
+    <main className="min-h-screen py-20 px-4 md:px-6">
 
-    <div
-      style={{
-        display: "flex",
-        gap: "12px",
-      }}
-    >
-      <button
-       onClick={() =>
-       alterarStatus(convidado.id, "confirmado")
-        }
-        style={{
-           flex: 1,
-          padding: "16px",
-          borderRadius: "14px",
-          border: "none",
-          cursor: "pointer",
-          fontWeight: "600",
-          fontSize: "15px",
-          transition: "all .3s ease",
-          background: "#16a34a",
-          color: "#fff",
-          transform:
-            convidado.status === "confirmado"
-              ? "scale(1.08)"
-              : "scale(1)",
-          boxShadow:
-            convidado.status === "confirmado"
-              ? "0 0 20px rgba(22,163,74,.4)"
-              : "none",
-        }}
-      >
-        ✓ Vou Comparecer
-      </button>
+      <div className="max-w-3xl mx-auto">
 
-      <button
-       onClick={() =>
-        alterarStatus(convidado.id, "nao_vou")}
-        style={{
-          flex: 1,
-          padding: "16px",
-          borderRadius: "14px",
-          border: "none",
-          cursor: "pointer",
-          fontWeight: "600",
-          fontSize: "15px",
-          transition: "all .3s ease",
-          background: "#dc2626",
-          color: "#fff",
-          transform:
-            convidado.status === "nao_vou"
-              ? "scale(1.08)"
-              : "scale(1)",
-          boxShadow:
-            convidado.status === "nao_vou"
-              ? "0 0 20px rgba(220,38,38,.4)"
-              : "none",
-        }}
-      >
-        ✕ Não vou Comparecer
-      </button>
-    </div>
-  </div>
-))}
-  </div>
+        {/* CABEÇALHO */}
+        <div className="text-center mb-12">
+          <p className="uppercase tracking-[7px] text-yellow-600 text-sm mb-4">
+            Confirmação de presença
+          </p>
+
+          <FaCrown className="text-yellow-500 text-4xl mx-auto mb-5" />
+
+          <h1 className="text-5xl md:text-7xl text-yellow-500 font-light">
+            {familia.nome_familia}
+          </h1>
+
+          <div className="w-20 h-px bg-yellow-500/40 mx-auto my-6" />
+
+          <p className="text-black/60 text-lg md:text-xl leading-8 max-w-xl mx-auto">
+            Ficaremos muito felizes em compartilhar essa noite
+            tão especial com vocês.
+          </p>
+        </div>
+
+        {/* RESUMO */}
+        <div className="grid grid-cols-3 gap-3 md:gap-5 mb-10">
+
+          <div className="bg-white border border-yellow-500/20 rounded-2xl py-5 text-center shadow-sm">
+            <p className="text-3xl md:text-4xl text-yellow-500 font-light">
+              {convidados.length}
+            </p>
+
+            <p className="text-black/50 text-xs md:text-sm uppercase tracking-wide mt-1">
+              Convidados
+            </p>
+          </div>
+
+          <div className="bg-white border border-yellow-500/20 rounded-2xl py-5 text-center shadow-sm">
+            <p className="text-3xl md:text-4xl text-green-600 font-light">
+              {confirmados}
+            </p>
+
+            <p className="text-black/50 text-xs md:text-sm uppercase tracking-wide mt-1">
+              Confirmados
+            </p>
+          </div>
+
+          <div className="bg-white border border-yellow-500/20 rounded-2xl py-5 text-center shadow-sm">
+            <p className="text-3xl md:text-4xl text-yellow-500 font-light">
+              {respondidos}
+            </p>
+
+            <p className="text-black/50 text-xs md:text-sm uppercase tracking-wide mt-1">
+              Respondidos
+            </p>
+          </div>
+
+        </div>
+
+        {/* CONVIDADOS */}
+        <div className="space-y-5">
+
+          {convidados.map((convidado) => (
+            <div
+              key={convidado.id}
+              className="
+                bg-white
+                border
+                border-yellow-500/20
+                rounded-[28px]
+                p-5
+                md:p-7
+                shadow-[0_10px_35px_rgba(0,0,0,0.05)]
+              "
+            >
+              <h2 className="text-2xl md:text-3xl text-black text-center font-medium">
+                {convidado.nome}
+              </h2>
+
+              <div className="w-12 h-px bg-yellow-500/30 mx-auto my-5" />
+
+              <p className="text-black/50 text-center mb-5">
+                Você poderá comparecer?
+              </p>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+
+                {/* VOU */}
+                <button
+                  onClick={() =>
+                    alterarStatus(
+                      convidado.id,
+                      "confirmado"
+                    )
+                  }
+                  className={`
+                    flex
+                    items-center
+                    justify-center
+                    gap-3
+                    py-4
+                    px-4
+                    rounded-2xl
+                    border
+                    font-semibold
+                    transition-all
+                    duration-300
+                    ${
+                      convidado.status === "confirmado"
+                        ? "bg-green-600 border-green-600 text-white shadow-lg scale-[1.02]"
+                        : "bg-white border-green-600/30 text-green-700 hover:bg-green-50"
+                    }
+                  `}
+                >
+                  <FaCheck />
+
+                  Vou comparecer
+                </button>
+
+                {/* NÃO VOU */}
+                <button
+                  onClick={() =>
+                    alterarStatus(
+                      convidado.id,
+                      "nao_vou"
+                    )
+                  }
+                  className={`
+                    flex
+                    items-center
+                    justify-center
+                    gap-3
+                    py-4
+                    px-4
+                    rounded-2xl
+                    border
+                    font-semibold
+                    transition-all
+                    duration-300
+                    ${
+                      convidado.status === "nao_vou"
+                        ? "bg-red-600 border-red-600 text-white shadow-lg scale-[1.02]"
+                        : "bg-white border-red-600/30 text-red-700 hover:bg-red-50"
+                    }
+                  `}
+                >
+                  <FaXmark />
+
+                  Não vou comparecer
+                </button>
+
+              </div>
+            </div>
+          ))}
+
+        </div>
+
+        {/* SALVAR */}
         <button
           onClick={salvarConfirmacao}
-          style={{
-            width: "100%",
-            marginTop: "25px",
-            padding: "16px",
-            background:
-            "linear-gradient(135deg,#d4af37,#e7c45a)",
-            boxShadow:
-            "0 10px 25px rgba(212,175,55,.35)",
-            letterSpacing: ".5px",
-            color: "#000",
-            border: "none",
-            borderRadius: "14px",
-            fontSize: "18px",
-            fontWeight: "bold",
-            cursor: "pointer",
-            fontecolor: "black",
-          }}
+          disabled={salvando}
+          className="
+            w-full
+            mt-10
+            py-5
+            rounded-2xl
+            bg-yellow-500
+            text-black
+            text-lg
+            md:text-xl
+            font-semibold
+            shadow-[0_12px_30px_rgba(212,175,55,0.25)]
+            hover:bg-yellow-400
+            hover:scale-[1.01]
+            transition-all
+            disabled:opacity-60
+            disabled:cursor-not-allowed
+          "
         >
-          Confirmar Presença
+          {salvando
+            ? "Salvando..."
+            : "Salvar confirmação"}
         </button>
-        {sucesso && (
-  <div
-    style={{
-      position: "fixed",
-      inset: 0,
-      background: "rgba(0,0,0,0.65)",
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
-      zIndex: 9999,
-    }}
-  >
-    <div
-      style={{
-        background: "#fff",
-        width: "90%",
-        maxWidth: "500px",
-        padding: "40px",
-        borderRadius: "24px",
-        textAlign: "center",
-        boxShadow: "0 20px 60px rgba(0,0,0,.25)",
-      }}
-    >
-      <div
-        style={{
-          fontSize: "70px",
-          marginBottom: "20px",
-        }}
-      >
-        ✨
+
+        <p className="text-center text-black/40 mt-5 text-sm">
+          Você poderá acessar este convite novamente para
+          alterar sua resposta.
+        </p>
+
       </div>
 
-      <h2
-        style={{
-          color: "#d4af37",
-          fontSize: "32px",
-          marginBottom: "15px",
-        }}
-      >
-        Resposta Registrada!
-      </h2>
+      {/* MODAL DE SUCESSO */}
+      {sucesso && (
+        <div className="fixed inset-0 z-[9999] bg-black/70 backdrop-blur-sm flex items-center justify-center px-5">
 
-      <p
-        style={{
-          color: "#444",
-          fontSize: "18px",
-          lineHeight: "1.7",
-          marginBottom: "25px",
-        }}
-      >
-        Sua resposta foi salva com sucesso.
-        <br />
-        Obrigado por participar deste momento tão especial.
-      </p>
+          <div
+            className="
+              bg-white
+              w-full
+              max-w-lg
+              rounded-[32px]
+              p-8
+              md:p-12
+              text-center
+              shadow-2xl
+              border
+              border-yellow-500/20
+            "
+          >
+            <div className="w-20 h-20 rounded-full bg-yellow-500/10 flex items-center justify-center mx-auto mb-6">
+              <FaCheck className="text-yellow-500 text-4xl" />
+            </div>
 
-      <button
-        onClick={() => setSucesso(false)}
-        style={{
-          background: "#d4af37",
-          color: "#000",
-          border: "none",
-          padding: "14px 30px",
-          borderRadius: "12px",
-          cursor: "pointer",
-          fontWeight: "bold",
-          fontSize: "16px",
-        }}
-      >
-        Fechar
-      </button>
-    </div>
-  </div>
-)}
-      </div>
-    </div>
+            <p className="uppercase tracking-[5px] text-yellow-600 text-xs mb-4">
+              Confirmação
+            </p>
+
+            <h2 className="text-4xl md:text-5xl text-yellow-500 mb-5">
+              Resposta registrada
+            </h2>
+
+            <p className="text-black/60 text-lg leading-8">
+              Sua resposta foi salva com sucesso.
+              Maria Clara ficará muito feliz em compartilhar
+              essa noite tão especial com vocês.
+            </p>
+
+            <div className="w-16 h-px bg-yellow-500/30 mx-auto my-7" />
+
+            <button
+              onClick={() => setSucesso(false)}
+              className="
+                bg-yellow-500
+                text-black
+                px-10
+                py-4
+                rounded-full
+                font-semibold
+                hover:bg-yellow-400
+                hover:scale-105
+                transition-all
+              "
+            >
+              Fechar
+            </button>
+          </div>
+
+        </div>
+      )}
+
+    </main>
   );
 }
