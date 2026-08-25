@@ -1,19 +1,41 @@
 import "server-only";
 import { createClient } from "@supabase/supabase-js";
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_ROLE_KEY,
-  {
-    auth: {
-      persistSession: false,
-      autoRefreshToken: false,
-    },
-  }
-);
-
 export async function POST(request, { params }) {
   try {
+    const supabaseUrl =
+      process.env.NEXT_PUBLIC_SUPABASE_URL;
+
+    const serviceRoleKey =
+      process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+    if (!supabaseUrl || !serviceRoleKey) {
+      console.error(
+        "Variáveis do Supabase não configuradas."
+      );
+
+      return Response.json(
+        {
+          error:
+            "Configuração do servidor incompleta.",
+        },
+        {
+          status: 500,
+        }
+      );
+    }
+
+    const supabase = createClient(
+      supabaseUrl,
+      serviceRoleKey,
+      {
+        auth: {
+          persistSession: false,
+          autoRefreshToken: false,
+        },
+      }
+    );
+
     const { codigo } = await params;
     const body = await request.json();
 
@@ -30,27 +52,33 @@ export async function POST(request, { params }) {
       .trim()
       .toUpperCase();
 
-    // 1. Localiza a família pelo código
-    const { data: familia, error: familiaError } =
-      await supabase
-        .from("familias")
-        .select("id")
-        .eq("codigo", codigoFormatado)
-        .single();
+    const {
+      data: familia,
+      error: familiaError,
+    } = await supabase
+      .from("familias")
+      .select("id")
+      .eq("codigo", codigoFormatado)
+      .single();
 
     if (familiaError || !familia) {
       return Response.json(
-        { error: "Convite inválido." },
-        { status: 404 }
+        {
+          error: "Convite inválido.",
+        },
+        {
+          status: 404,
+        }
       );
     }
 
-    // 2. Busca os convidados dessa família
-    const { data: convidadosFamilia, error: convidadosError } =
-      await supabase
-        .from("convidados")
-        .select("id")
-        .eq("familia_id", familia.id);
+    const {
+      data: convidadosFamilia,
+      error: convidadosError,
+    } = await supabase
+      .from("convidados")
+      .select("id")
+      .eq("familia_id", familia.id);
 
     if (convidadosError) {
       throw convidadosError;
@@ -61,46 +89,53 @@ export async function POST(request, { params }) {
     );
 
     for (const resposta of respostas) {
-  if (!idsPermitidos.has(resposta.id)) {
-    return Response.json(
-      { error: "Convidado inválido." },
-      { status: 403 }
-    );
-  }
+      if (!idsPermitidos.has(resposta.id)) {
+        return Response.json(
+          {
+            error: "Convidado inválido.",
+          },
+          {
+            status: 403,
+          }
+        );
+      }
 
-  const statusValido =
-    resposta.status === "confirmado" ||
-    resposta.status === "nao_vou" ||
-    resposta.status === "pendente" ||
-    resposta.status === null;
+      const statusValido =
+        resposta.status === "confirmado" ||
+        resposta.status === "nao_vou" ||
+        resposta.status === "pendente" ||
+        resposta.status === null;
 
-  if (!statusValido) {
-    return Response.json(
-      { error: "Status inválido." },
-      { status: 400 }
-    );
-  }
-}
+      if (!statusValido) {
+        return Response.json(
+          {
+            error: "Status inválido.",
+          },
+          {
+            status: 400,
+          }
+        );
+      }
+    }
 
-// 4. Atualiza somente convidados da família correta
-for (const resposta of respostas) {
-  const statusFinal =
-    resposta.status === "pendente"
-      ? null
-      : resposta.status;
+    for (const resposta of respostas) {
+      const statusFinal =
+        resposta.status === "pendente"
+          ? null
+          : resposta.status;
 
-  const { error } = await supabase
-    .from("convidados")
-    .update({
-      status: statusFinal,
-    })
-    .eq("id", resposta.id)
-    .eq("familia_id", familia.id);
+      const { error } = await supabase
+        .from("convidados")
+        .update({
+          status: statusFinal,
+        })
+        .eq("id", resposta.id)
+        .eq("familia_id", familia.id);
 
-  if (error) {
-    throw error;
-  }
-}
+      if (error) {
+        throw error;
+      }
+    }
 
     return Response.json({
       success: true,
