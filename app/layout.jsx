@@ -6,7 +6,14 @@ const cormorant = Cormorant_Garamond({
   weight: ["300", "400", "500", "600", "700"],
 });
 export const metadata = {
+  metadataBase: new URL(
+    process.env.NODE_ENV === "production"
+      ? "https://convite-maria-sage.vercel.app"
+      : "http://localhost:3000"
+  ),
+
   title: "Maria Clara | 15 Anos",
+
   description:
     "Você está convidado para uma noite inesquecível.",
 

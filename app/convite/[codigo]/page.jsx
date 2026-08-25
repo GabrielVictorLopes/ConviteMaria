@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import { supabase } from "../../../lib/supabase";
 
 import {
   FaCheck,
@@ -14,50 +13,39 @@ export default function Convite() {
   const params = useParams();
 
   const [familia, setFamilia] = useState(null);
-  const [convidados, setConvidados] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [salvando, setSalvando] = useState(false);
-  const [sucesso, setSucesso] = useState(false);
+const [convidados, setConvidados] = useState([]);
+const [loading, setLoading] = useState(true);
+const [salvando, setSalvando] = useState(false);
+const [sucesso, setSucesso] = useState(false);
 
-  useEffect(() => {
-    if (params?.codigo) {
-      carregar();
-    }
-  }, [params]);
+useEffect(() => {
+  if (params?.codigo) {
+    carregar();
+  }
+}, [params?.codigo]);
 
-  async function carregar() {
-    setLoading(true);
+async function carregar() {
+  try {
+    const resposta = await fetch(
+      `/api/convite/${params.codigo}`
+    );
 
-    const { data, error } = await supabase
-      .from("familias")
-      .select("*")
-      .eq("codigo", params.codigo)
-      .limit(1);
-
-    if (error || !data || data.length === 0) {
+    if (!resposta.ok) {
       setFamilia(null);
-      setLoading(false);
       return;
     }
 
-    const familiaData = data[0];
+    const dados = await resposta.json();
 
-    setFamilia(familiaData);
-
-    const { data: convidadosData, error: convidadosError } =
-      await supabase
-        .from("convidados")
-        .select("*")
-        .eq("familia_id", familiaData.id)
-        .order("nome");
-
-    if (convidadosError) {
-      console.error(convidadosError);
-    }
-
-    setConvidados(convidadosData || []);
+    setFamilia(dados.familia);
+    setConvidados(dados.convidados || []);
+  } catch (error) {
+    console.error(error);
+    setFamilia(null);
+  } finally {
     setLoading(false);
   }
+}
 
   function alterarStatus(id, status) {
     setConvidados((anterior) =>
@@ -70,28 +58,54 @@ export default function Convite() {
   }
 
   async function salvarConfirmacao() {
-    try {
-      setSalvando(true);
+  try {
+    setSalvando(true);
 
-      for (const convidado of convidados) {
-        const { error } = await supabase
-          .from("convidados")
-          .update({
-            status: convidado.status,
-          })
-          .eq("id", convidado.id);
+    const resposta = await fetch(
+      `/api/convite/${params.codigo}/confirmar`,
+      {
+        method: "POST",
 
-        if (error) throw error;
+        headers: {
+          "Content-Type": "application/json",
+        },
+
+        body: JSON.stringify({
+        respostas: convidados.map((convidado) => ({
+          id: convidado.id,
+          status:
+            convidado.status === "pendente"
+              ? null
+              : convidado.status ?? null,
+        })),
+      }),
       }
+    );
 
-      setSucesso(true);
-    } catch (error) {
-      console.error(error);
-      alert("Erro ao salvar confirmação.");
-    } finally {
-      setSalvando(false);
+    const dados = await resposta.json();
+
+    if (!resposta.ok) {
+      throw new Error(
+        dados.error ||
+          "Erro ao salvar confirmação."
+      );
     }
+
+    setSucesso(true);
+  } catch (error) {
+    console.error(
+      "Erro ao confirmar:",
+      error
+    );
+
+    alert(
+      error.message ||
+        "Erro ao salvar confirmação."
+    );
+  } finally {
+    setSalvando(false);
   }
+}
 
   const confirmados = convidados.filter(
     (convidado) => convidado.status === "confirmado"

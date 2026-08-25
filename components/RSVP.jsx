@@ -2,38 +2,24 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { supabase } from "../lib/supabase";
 
 export default function RSVP() {
   const [codigo, setCodigo] = useState("");
   const [erro, setErro] = useState("");
-  const [carregando, setCarregando] = useState(false);
 
   const router = useRouter();
 
-  async function acessarConvite(e) {
+  function acessarConvite(e) {
     e.preventDefault();
 
-    if (!codigo.trim()) {
+    const codigoFormatado = codigo.trim().toUpperCase();
+
+    if (!codigoFormatado) {
       setErro("Digite seu código.");
       return;
     }
 
-    setCarregando(true);
     setErro("");
-
-    const codigoFormatado = codigo.trim().toUpperCase();
-
-    const { data, error } = await supabase
-      .from("familias")
-      .select("id")
-      .eq("codigo", codigoFormatado);
-
-    if (error || !data || data.length === 0) {
-      setErro("Código inválido. Verifique e tente novamente.");
-      setCarregando(false);
-      return;
-    }
 
     router.push(`/convite/${codigoFormatado}`);
   }
@@ -43,16 +29,16 @@ export default function RSVP() {
       id="confirmacao"
       className="relative py-28 px-6 overflow-hidden"
     >
-      {/* decoração de fundo */}
-  
       <div className="relative z-10 max-w-2xl mx-auto text-center">
 
-        {/* detalhe superior */}
+        {/* Detalhe superior */}
         <div className="flex items-center justify-center gap-4 mb-6">
           <div className="w-16 h-[1px] bg-yellow-500/40" />
+
           <span className="text-yellow-500 text-2xl">
             ✦
           </span>
+
           <div className="w-16 h-[1px] bg-yellow-500/40" />
         </div>
 
@@ -125,7 +111,6 @@ export default function RSVP() {
 
             <button
               type="submit"
-              disabled={carregando}
               className="
                 bg-yellow-500
                 text-black
@@ -137,12 +122,10 @@ export default function RSVP() {
                 duration-300
                 hover:scale-105
                 hover:bg-yellow-400
-                disabled:opacity-60
-                disabled:cursor-not-allowed
                 md:min-w-[170px]
               "
             >
-              {carregando ? "Verificando..." : "Entrar no Baile →"}
+              Entrar no Baile →
             </button>
           </div>
 
@@ -159,9 +142,11 @@ export default function RSVP() {
 
         <div className="flex items-center justify-center gap-4 mt-12">
           <div className="w-20 h-[1px] bg-gradient-to-r from-transparent to-yellow-500/40" />
+
           <span className="text-yellow-500 text-sm">
             ✦
           </span>
+
           <div className="w-20 h-[1px] bg-gradient-to-l from-transparent to-yellow-500/40" />
         </div>
 
