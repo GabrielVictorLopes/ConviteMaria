@@ -74,7 +74,7 @@ export default function DressCode() {
 
               <li className="flex items-center gap-3">
                 <span className="text-[#c9a86a] text-xl">✦</span>
-                <span>Sapato social ou casual sofisticado</span>
+                <span>Sapato social ou tênis casual</span>
               </li>
             </ul>
           </div>
