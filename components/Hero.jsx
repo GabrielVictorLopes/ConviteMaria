@@ -52,30 +52,7 @@ export default function Hero() {
           09 • 10 • 2026
         </p>
 
-        <a
-          href="#confirmacao"
-          className="
-            inline-flex
-            items-center
-            justify-center
-            mt-10
-            px-10
-            py-4
-            border
-            border-yellow-400/70
-            text-yellow-300
-            rounded-full
-            backdrop-blur-sm
-            bg-black/20
-            hover:bg-yellow-500
-            hover:text-black
-            hover:scale-105
-            transition-all
-            duration-300
-          "
-        >
-          Abrir Convite
-        </a>
+       
       </motion.div>
 
       {/* indicação para rolar */}
