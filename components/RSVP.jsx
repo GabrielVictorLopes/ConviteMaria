@@ -56,89 +56,86 @@ export default function RSVP() {
         </p>
 
         <form
-          onSubmit={acessarConvite}
-          className="
-            mt-10
-            bg-white/80
-            backdrop-blur-md
-            border
-            border-yellow-500/20
-            p-5
-            md:p-8
-            rounded-[30px]
-            shadow-xl
-          "
-        >
-          <div
-            className="
-              flex
-              flex-col
-              md:flex-row
-              gap-3
-              p-2
-              rounded-2xl
-              border
-              border-yellow-500/40
-              bg-white
-            "
-          >
-            <input
-              type="text"
-              placeholder="Código do convite"
-              value={codigo}
-              onChange={(e) => {
-                setCodigo(e.target.value.toUpperCase());
-                setErro("");
-              }}
-              className="
-                flex-1
-                px-6
-                py-4
-                bg-transparent
-                text-black
-                text-center
-                md:text-left
-                text-lg
-                tracking-[2px]
-                uppercase
-                font-sans
-                outline-none
-                placeholder:text-black/30
-                placeholder:normal-case
-                placeholder:tracking-normal
-              "
-            />
+  onSubmit={acessarConvite}
+  className="
+    mt-10
+    max-w-xl
+    mx-auto
+  "
+>
+  <div
+    className="
+      flex
+      flex-col
+      md:flex-row
+      items-stretch
+      gap-3
+    "
+  >
+    <input
+      type="text"
+      placeholder="Digite seu código"
+      value={codigo}
+      onChange={(e) => {
+        setCodigo(e.target.value.toUpperCase());
+        setErro("");
+      }}
+      className="
+        flex-1
+        px-6
+        py-4
+        bg-white
+        border
+        border-yellow-500/30
+        rounded-full
+        text-black
+        text-center
+        md:text-left
+        text-lg
+        tracking-[2px]
+        uppercase
+        font-sans
+        outline-none
+        transition-all
+        duration-300
+        focus:border-yellow-500
+        focus:shadow-[0_0_0_3px_rgba(234,179,8,0.08)]
+        placeholder:text-black/30
+        placeholder:normal-case
+        placeholder:tracking-normal
+      "
+    />
 
-            <button
-              type="submit"
-              className="
-                bg-yellow-500
-                text-black
-                px-8
-                py-4
-                rounded-xl
-                font-semibold
-                transition-all
-                duration-300
-                hover:scale-105
-                hover:bg-yellow-400
-                md:min-w-[170px]
-              "
-            >
-              Entrar no Baile →
-            </button>
-          </div>
+    <button
+      type="submit"
+      className="
+        px-8
+        py-4
+        bg-yellow-500
+        text-black
+        rounded-full
+        font-semibold
+        transition-all
+        duration-300
+        hover:bg-yellow-400
+        hover:scale-[1.02]
+        md:min-w-[180px]
+      "
+    >
+      Entrar no Baile
+    </button>
+  </div>
 
-          {erro && (
-            <p className="text-red-600 text-center mt-4 font-medium">
-              {erro}
-            </p>
-          )}
+  {erro && (
+    <p className="text-red-600 text-center mt-4 font-medium">
+      {erro}
+    </p>
+  )}
 
-          <p className="text-black/40 text-base mt-5 tracking-wide">
-            Seu código é pessoal e exclusivo.
-          </p>
-        </form>
+  <p className="text-black/40 text-sm mt-4 tracking-wide">
+    Seu código é pessoal e exclusivo.
+  </p>
+</form>
 
         <div className="flex items-center justify-center gap-4 mt-12">
           <div className="w-20 h-[1px] bg-gradient-to-r from-transparent to-yellow-500/40" />

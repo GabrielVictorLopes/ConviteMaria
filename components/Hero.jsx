@@ -59,8 +59,8 @@ export default function Hero() {
             tracking-[5px]
             md:tracking-[10px]
             uppercase
-            text-base
-            md:text-2xl
+            text-xl
+            md:text-3xl
             text-white/80
             mb-4
             md:mb-5
@@ -71,7 +71,7 @@ export default function Hero() {
 
         <h1
           className="
-            text-5xl
+            text-7xl
             md:text-9xl
             text-white
             font-light
@@ -93,8 +93,8 @@ export default function Hero() {
 
         <h2
           className="
-            text-3xl
-            md:text-6xl
+            text-5xl
+            md:text-7xl
             text-white
             font-light
           "
@@ -109,7 +109,7 @@ export default function Hero() {
             text-white/90
             tracking-[3px]
             md:tracking-[4px]
-            text-lg
+            text-2xl
             md:text-2xl
           "
         >
